@@ -1,0 +1,12 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.gradle
+bin
+.classpath
+.project
+.settings
+target/
+build
