@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>userCenter log</title>
+<title>fileServer log</title>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 </head>
 <body>
@@ -23,7 +23,7 @@
 <script>
 	$(document).ready(function() {
 		// 指定websocket路径
-		var websocket = new WebSocket('ws://<%=basePath%>log/<%=env%>/user-center');
+		var websocket = new WebSocket('ws://<%=basePath%>log/<%=env%>/file-server');
 		websocket.onmessage = function(event) {
 			$("#log-container div").append(event.data);
 			$("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());

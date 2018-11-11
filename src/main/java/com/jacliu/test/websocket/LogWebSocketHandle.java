@@ -10,47 +10,41 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/log/{projectName}")
-public class LogWebSocketHandle {
+import com.jacliu.test.utils.PropertiesReaderUtil;
 
+@ServerEndpoint("/log/{env}/{projectName}")
+public class LogWebSocketHandle {
 	private Process process;
 	private InputStream inputStream;
 
-	/**
-	 * 新的WebSocket请求开启
-	 */
 	@OnOpen
-	public void onOpen(@PathParam(value = "projectName") String projectName, Session session) {
+	public void onOpen(@PathParam("env") String env, @PathParam("projectName") String projectName, Session session) {
 		try {
-
-			String logPath = getLogPath(projectName);
+			String logPath = getLogPath(env, projectName);
 			System.out.println("###  " + projectName + " :: " + logPath + "  #### ");
 
-			// 执行tail -f命令
-			process = Runtime.getRuntime().exec("tail -200f " + logPath);
-			inputStream = process.getInputStream();
+			this.process = Runtime.getRuntime().exec("tail -200f " + logPath);
+			this.inputStream = this.process.getInputStream();
 
-			// 一定要启动新的线程，防止InputStream阻塞处理WebSocket的线程
-			TailLogThread thread = new TailLogThread(inputStream, session);
+			TailLogThread thread = new TailLogThread(this.inputStream, session);
 			thread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * WebSocket请求关闭
-	 */
 	@OnClose
 	public void onClose() {
 		try {
-			if (inputStream != null)
-				inputStream.close();
+			if (this.inputStream != null) {
+				this.inputStream.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (process != null)
-			process.destroy();
+		if (this.process != null) {
+			this.process.destroy();
+		}
 	}
 
 	@OnError
@@ -58,18 +52,12 @@ public class LogWebSocketHandle {
 		thr.printStackTrace();
 	}
 
-	private String getLogPath(String projectName) {
-		String logPath = null;
-		if ("omsMessage".equals(projectName)) {
-			logPath = "/home/log/message/message-info.log";
-		}
-		if ("omsWeb".equals(projectName)) {
-			logPath = "/home/tomcatHome/tomcat_oms_back/logs/catalina.out";
-		}
-		if ("userCenter".equals(projectName)) {
-			logPath = "/home/tomcatHome/tomcat_user_center/logs/catalina.out";
-		}
+	private String getLogPath(String env, String projectName) {
+		String logPathKey = env + "." + projectName + "." + "log.path";
+
+		String logPath = PropertiesReaderUtil.getConfigInfo(logPathKey);
+		System.out.println("logPathKey :: " + logPathKey);
+		System.out.println("logPath :: " + logPath);
 		return logPath;
 	}
-
 }

@@ -3,31 +3,42 @@ package com.jacliu.test.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.jacliu.test.utils.PropertiesReaderUtil;
 
 @Controller
 public class LogController {
-
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = { "/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String index(HttpServletRequest request) {
+		String isTest = PropertiesReaderUtil.getConfigInfo("isTest");
+		request.setAttribute("isTest", isTest);
 		return "index";
 	}
 
-	@RequestMapping(value = "/omsMessageLog", method = RequestMethod.GET)
-	public String omsMessageLog(ModelMap model) {
-		return "omsMessageLog";
+	@RequestMapping(value = { "/messageLog" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String omsMessageLog(String env, HttpServletRequest request) {
+		request.setAttribute("env", env);
+		return "messageLog";
 	}
 
-	@RequestMapping(value = "/userCenterLog", method = RequestMethod.GET)
-	public String userCenterLog(ModelMap model) {
+	@RequestMapping(value = { "/userCenterLog" }, method = {
+			org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String userCenterLog(String env, HttpServletRequest request) {
+		request.setAttribute("env", env);
 		return "userCenterLog";
 	}
 
-	@RequestMapping(value = "/omsWebLog", method = RequestMethod.GET)
-	public String sayHelloAgain(ModelMap model) {
-		return "omsWebLog";
+	@RequestMapping(value = { "/fileServerLog" }, method = {
+			org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String fileServerLog(String env, HttpServletRequest request) {
+		request.setAttribute("env", env);
+		return "fileServerLog";
 	}
 
+	@RequestMapping(value = { "/omsWebLog" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String sayHelloAgain(String env, HttpServletRequest request) {
+		request.setAttribute("env", env);
+		return "omsWebLog";
+	}
 }
