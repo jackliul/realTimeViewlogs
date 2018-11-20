@@ -9,6 +9,7 @@ import com.jacliu.test.utils.PropertiesReaderUtil;
 
 @Controller
 public class LogController {
+
 	@RequestMapping(value = { "/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String index(HttpServletRequest request) {
 		String isTest = PropertiesReaderUtil.getConfigInfo("isTest");
@@ -16,10 +17,11 @@ public class LogController {
 		return "index";
 	}
 
-	@RequestMapping(value = { "/messageLog" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String omsMessageLog(String env, HttpServletRequest request) {
-		request.setAttribute("env", env);
-		return "messageLog";
+	@RequestMapping(value = { "/projectPoolLog" }, method = {
+			org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String projectPoolLog(String env, HttpServletRequest request) {
+		request.setAttribute("env", "other");
+		return "projectPoolLog";
 	}
 
 	@RequestMapping(value = { "/userCenterLog" }, method = {
@@ -37,8 +39,15 @@ public class LogController {
 	}
 
 	@RequestMapping(value = { "/omsWebLog" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String sayHelloAgain(String env, HttpServletRequest request) {
+	public String omsWebLog(String env, HttpServletRequest request) {
 		request.setAttribute("env", env);
 		return "omsWebLog";
+	}
+
+	@RequestMapping(value = { "/interfacePlatformLog" }, method = {
+			org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String interfacePlatformLog(String env, HttpServletRequest request) {
+		request.setAttribute("env", env);
+		return "interfacePlatformLog";
 	}
 }

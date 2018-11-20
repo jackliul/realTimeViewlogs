@@ -4,12 +4,14 @@
  String path = request.getContextPath();  
  String basePath = request.getServerName() + ":" + request.getServerPort()  
          + path + "/"; 
+ 
+ String env = (String)request.getAttribute("env");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
-<title>omsMessage log</title>
+<title>interfacePlatform log</title>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 </head>
 <body>
@@ -21,7 +23,7 @@
 <script>
 	$(document).ready(function() {
 		// 指定websocket路径
-		var websocket = new WebSocket('ws://<%=basePath%>log/omsMessage');
+		var websocket = new WebSocket('ws://<%=basePath%>log/<%=env%>/interfacePlatform');
 		websocket.onmessage = function(event) {
 			$("#log-container div").append(event.data);
 			$("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());
