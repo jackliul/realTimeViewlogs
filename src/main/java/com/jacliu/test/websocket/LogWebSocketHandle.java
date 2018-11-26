@@ -2,6 +2,8 @@ package com.jacliu.test.websocket;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -58,6 +60,13 @@ public class LogWebSocketHandle {
 		String logPath = PropertiesReaderUtil.getConfigInfo(logPathKey);
 		System.out.println("logPathKey :: " + logPathKey);
 		System.out.println("logPath :: " + logPath);
+
+		if (!logPath.contains("catalina.out")) {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			String currentLog = "catalina." + format.format(new Date()) + ".out";
+			logPath = logPath + currentLog;
+		}
+
 		return logPath;
 	}
 }
